@@ -705,24 +705,17 @@ let STATE = {
 };
 
 // ─────────────────────────────────────────────
-// JSONP HELPER
+// FETCH HELPER — POST (works from HTTPS/GitHub Pages)
 // ─────────────────────────────────────────────
 function callScript(payload, callback) {
-  const cbName = '_cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
-  window[cbName] = function(data) {
-    delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-    callback(data);
-  };
-  const script = document.createElement('script');
-  script.onerror = function() {
-    delete window[cbName];
-    callback({ status: 'error', error: 'Network error' });
-  };
-  script.src = CONFIG.APPS_SCRIPT_URL +
-    '?callback=' + cbName +
-    '&payload=' + encodeURIComponent(JSON.stringify(payload));
-  document.body.appendChild(script);
+  fetch(CONFIG.APPS_SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: { 'Content-Type': 'text/plain' } // Apps Script requires text/plain for doPost
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) { callback(data); })
+  .catch(function(err) { callback({ status: 'error', error: err.toString() }); });
 }
 
 // ─────────────────────────────────────────────
@@ -1165,13 +1158,11 @@ function setInputDisabled(disabled) {
 // ─────────────────────────────────────────────
 // Warmup Apps Script on load
 if (CONFIG.APPS_SCRIPT_URL) {
-  try {
-    const ws = document.createElement('script');
-    ws.src = CONFIG.APPS_SCRIPT_URL + '?callback=_warmup&payload=' + encodeURIComponent(JSON.stringify({ warmup: 1 }));
-    window._warmup = function() { delete window._warmup; if (ws.parentNode) ws.parentNode.removeChild(ws); };
-    ws.onerror = function() { if (ws.parentNode) ws.parentNode.removeChild(ws); };
-    setTimeout(() => document.body.appendChild(ws), 800);
-  } catch(e) {}
+  fetch(CONFIG.APPS_SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify({ warmup: 1 }),
+    headers: { 'Content-Type': 'text/plain' }
+  }).catch(function(){});
 }
 
 // Load initial user config
