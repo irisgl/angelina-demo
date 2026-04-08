@@ -869,7 +869,7 @@ function sendMessage() {
     updateWordCounts(STATE.full_history_words, STATE.summary_words, sentWords);
 
     if (STATE.full_history_words > 0 && sentWords > 0) {
-      updateComparisonBars(STATE.full_history_words, sentWords);
+      
     }
 
     // Update panel 3 — evidence pack
@@ -914,7 +914,7 @@ function runSummarizer() {
 
       // Update comparison bars after summarization
       if (STATE.full_history_words > 0 && data.word_count > 0) {
-        updateComparisonBars(STATE.full_history_words, data.word_count);
+        
       }
     } else {
       showAlert('Nothing to summarize yet — send some messages first.');
