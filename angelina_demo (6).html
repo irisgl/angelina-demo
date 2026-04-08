@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Angelina AI — Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0f0d;
+  --bg2: #0e1511;
+  --bg3: #111a14;
+  --card: #131d16;
+  --teal: #1d9e75;
+  --teal-light: #9fe1cb;
+  --teal-mid: #5dcaa5;
+  --teal-dark: #0b2a22;
+  --teal-border: #1d4a35;
+  --purple: #7f77dd;
+  --purple-light: #cecbf6;
+  --purple-dark: #13102a;
+  --purple-border: #3a3580;
+  --amber: #ef9f27;
+  --amber-light: #fac775;
+  --red: #e24b4a;
+  --red-bg: #1a0808;
+  --white: #ffffff;
+  --text: #e8f4ef;
+  --text-dim: #5a8a72;
+  --border: #1a2e22;
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'Inter', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
+
+/* ── HEADER ── */
+.header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+.logo {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--teal-light);
+  letter-spacing: 0.05em;
+  margin-right: 8px;
+}
+.logo span { color: var(--text-dim); font-weight: 400; }
+
+/* User selector */
+.user-tabs {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+}
+.user-tab {
+  padding: 7px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.user-tab:hover { border-color: var(--teal-border); color: var(--teal-mid); }
+.user-tab.active {
+  background: var(--teal-dark);
+  border-color: var(--teal);
+  color: var(--teal-light);
+  font-weight: 600;
+}
+
+/* Policy strip */
+.policy-strip {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.policy-strip .pill {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 3px 10px;
+  border-radius: 4px;
+  color: var(--teal-mid);
+}
+.policy-strip .pill.model { color: var(--amber-light); }
+
+/* Budget bar */
+.budget-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 200px;
+}
+.budget-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.budget-bar-outer {
+  flex: 1;
+  height: 6px;
+  background: var(--bg3);
+  border-radius: 3px;
+  overflow: hidden;
+  min-width: 80px;
+}
+.budget-bar-inner {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease, background 0.3s;
+  background: var(--teal);
+}
+.budget-bar-inner.warn { background: var(--amber); }
+.budget-bar-inner.danger { background: var(--red); }
+.budget-pct {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  min-width: 30px;
+  color: var(--teal-mid);
+}
+.budget-pct.warn { color: var(--amber); }
+.budget-pct.danger { color: var(--red); }
+
+/* ── MAIN LAYOUT ── */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  height: calc(100vh - 50px - 38px - 50px);
+}
+.panel {
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.panel-header {
+  padding: 12px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.panel-title {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.panel-title.teal { color: var(--teal-mid); }
+.panel-title.purple { color: var(--purple); }
+.panel-title.green { color: var(--teal-light); }
+.word-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--bg3);
+  padding: 2px 8px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+.word-count.highlight { color: var(--teal-light); border-color: var(--teal-border); }
+
+/* Panel 2 purple border */
+.panel:nth-child(2) { border-left: 2px solid var(--purple-border); border-right: 2px solid var(--purple-border); }
+/* Panel 3 teal border */
+.panel:nth-child(3) { border-left: 2px solid var(--teal-border); }
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text);
+}
+.panel-body::-webkit-scrollbar { width: 4px; }
+.panel-body::-webkit-scrollbar-track { background: transparent; }
+.panel-body::-webkit-scrollbar-thumb { background: var(--teal-border); border-radius: 2px; }
+
+/* Messages in panel 1 */
+.msg-wrap { display: flex; flex-direction: column; gap: 10px; }
+.msg {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.7;
+  animation: msgIn 0.25s ease-out;
+  white-space: pre-wrap;
+}
+@keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.msg.user { background: var(--bg3); border: 1px solid var(--border); align-self: flex-end; max-width: 88%; color: var(--text); }
+.msg.assistant { background: var(--teal-dark); border: 1px solid var(--teal-border); align-self: flex-start; max-width: 92%; color: var(--teal-light); }
+.msg.system { background: var(--red-bg); border: 1px solid #5a1a1a; align-self: center; max-width: 90%; color: #f09595; font-size: 12px; text-align: center; border-radius: 6px; }
+
+/* PII badge */
+.pii-badge {
+  display: inline-block;
+  background: #2a1a00;
+  border: 1px solid var(--amber);
+  color: var(--amber-light);
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin: 0 2px;
+}
+
+/* Summary panel */
+.summary-text {
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--teal-light);
+  white-space: pre-wrap;
+}
+.summary-empty {
+  color: var(--text-dim);
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+  margin-top: 40px;
+}
+.redacted {
+  background: #2a1a00;
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 0 5px;
+  border-radius: 3px;
+}
+
+/* Sent to LLM panel */
+.evidence-pack {
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--teal-light);
+}
+.evidence-section {
+  margin-bottom: 16px;
+}
+.evidence-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.evidence-content {
+  background: var(--bg3);
+  border: 1px solid var(--teal-border);
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--teal-mid);
+  white-space: pre-wrap;
+}
+
+/* Typing indicator */
+.typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  align-self: flex-start;
+}
+.typing span {
+  width: 6px; height: 6px;
+  background: var(--teal-border);
+  border-radius: 50%;
+  animation: blink 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,80%,100%{opacity:0.3} 40%{opacity:1} }
+
+/* ── STATUS BAR ── */
+.status-bar {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  height: 38px;
+}
+.stat {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stat .val { color: var(--teal-light); font-weight: 600; }
+.stat .val.amber { color: var(--amber-light); }
+.stat-sep { color: var(--border); font-size: 16px; }
+
+.btn-action {
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+.btn-summarize {
+  background: var(--purple-dark);
+  border-color: var(--purple);
+  color: var(--purple-light);
+}
+.btn-summarize:hover { background: var(--purple); color: #fff; }
+.btn-summarize:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn-report {
+  background: var(--bg3);
+  border-color: var(--teal-border);
+  color: var(--teal-mid);
+}
+.btn-report:hover { background: var(--teal-dark); color: var(--teal-light); }
+
+/* ── CHAT INPUT ── */
+.chat-input-wrap {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 7px 16px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: 50px;
+}
+.chat-input {
+  flex: 1;
+  padding: 10px 16px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  outline: none;
+  transition: border 0.2s;
+}
+.chat-input:focus { border-color: var(--teal-border); }
+.chat-input::placeholder { color: var(--text-dim); }
+.btn-send {
+  padding: 10px 22px;
+  background: var(--teal);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.btn-send:hover { background: var(--teal-mid); }
+.btn-send:disabled { background: var(--text-dim); cursor: not-allowed; }
+.btn-upload {
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-dim);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-upload:hover { border-color: var(--amber); color: var(--amber); }
+#fileInput { display: none; }
+
+/* ── ALERT BANNER ── */
+.alert-banner {
+  display: none;
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--red-bg);
+  border: 1px solid var(--red);
+  color: #f09595;
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 10px 24px;
+  border-radius: 6px;
+  z-index: 1000;
+  animation: slideDown 0.3s ease-out;
+}
+@keyframes slideDown { from { top: -10px; opacity: 0; } to { top: 16px; opacity: 1; } }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--card);
+  border: 1px solid var(--teal-border);
+  border-radius: 10px;
+  width: 90%;
+  max-width: 900px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-title {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--teal-light);
+  letter-spacing: 0.08em;
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0 4px;
+}
+.modal-close:hover { color: var(--text); }
+.modal-body {
+  flex: 1;
+  overflow: auto;
+  padding: 16px 20px;
+}
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 11px;
+}
+.audit-table th {
+  text-align: left;
+  padding: 8px 10px;
+  background: var(--bg3);
+  color: var(--teal-mid);
+  border-bottom: 1px solid var(--teal-border);
+  white-space: nowrap;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.audit-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.audit-table tr:hover td { background: var(--bg3); }
+.audit-table td.pii-yes { color: var(--amber); }
+.audit-table td.model-name { color: var(--amber-light); }
+
+/* Summarizing overlay on panel 2 */
+.summarizing-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(10,15,13,0.85);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10;
+}
+.mode-toggle {
+  display: flex;
+  gap: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.mode-btn {
+  padding: 5px 14px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+}
+.mode-without {
+  background: var(--bg3);
+  color: var(--text-dim);
+}
+.mode-without:hover { background: var(--red-bg); color: #f09595; }
+.mode-without.active { background: var(--red-bg); color: #f09595; border: 1px solid var(--red); }
+.mode-with {
+  background: var(--bg3);
+  color: var(--text-dim);
+}
+.mode-with:hover { background: var(--teal-dark); color: var(--teal-light); }
+.mode-with.active { background: var(--teal-dark); color: var(--teal-light); border: 1px solid var(--teal); }
+.summarizing-text {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--purple-light);
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+</style>
+</head>
+<body>
+
+<div class="alert-banner" id="alertBanner"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">Angelina<span>.ai</span></div>
+
+  <div class="user-tabs">
+    <button class="user-tab active" onclick="switchUser('Maya')" id="tab-Maya">Maya — Legal VIP</button>
+    <button class="user-tab" onclick="switchUser('Danny')" id="tab-Danny">Danny — Legal</button>
+    <button class="user-tab" onclick="switchUser('Ronit')" id="tab-Ronit">Ronit — CS</button>
+  </div>
+
+  <div class="policy-strip">
+    <span class="pill" id="pillRole">Legal VIP</span>
+    <span class="pill model" id="pillModel">gpt-4o</span>
+    <span class="pill" id="pillBudget">$50/day</span>
+    <span class="pill" id="pillRetention">retention: HIGH</span>
+  </div>
+
+  <div class="budget-wrap">
+    <span class="budget-label">Budget</span>
+    <div class="budget-bar-outer">
+      <div class="budget-bar-inner" id="budgetBar" style="width:0%"></div>
+    </div>
+    <span class="budget-pct" id="budgetPct">0%</span>
+  </div>
+</div>
+
+<!-- MAIN PANELS -->
+<div class="main">
+
+  <!-- Panel 1: Full History -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title teal">Full History</span>
+      <span class="word-count" id="wc1">0 words</span>
+    </div>
+    <div class="panel-body" id="panel1">
+      <div class="msg-wrap" id="msgWrap"></div>
+    </div>
+  </div>
+
+  <!-- Panel 2: Angelina Summary -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title purple">Angelina Summary</span>
+      <span class="word-count" id="wc2">0 / <span id="wcLimit">5,000</span> words</span>
+    </div>
+    <div class="panel-body" id="panel2">
+      <div class="summary-empty" id="summaryEmpty">No summary yet — send a few messages then click Run Summarizer</div>
+      <div class="summary-text" id="summaryText"></div>
+    </div>
+    <div class="summarizing-overlay" id="summarizingOverlay">
+      <div class="typing"><span></span><span></span><span></span></div>
+      <div class="summarizing-text">Running NLP summarizer...</div>
+    </div>
+  </div>
+
+  <!-- Panel 3: Sent to LLM -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title green">Sent to LLM</span>
+      <span class="word-count highlight" id="wc3">0 words</span>
+    </div>
+    <div class="panel-body" id="panel3">
+      <div class="summary-empty" id="evidenceEmpty">Waiting for first message...</div>
+      <div class="evidence-pack" id="evidencePack" style="display:none">
+        <div class="evidence-section">
+          <div class="evidence-label">Context (summary)</div>
+          <div class="evidence-content" id="evSummary">—</div>
+        </div>
+        <div class="evidence-section">
+          <div class="evidence-label">Current request (PII cleaned)</div>
+          <div class="evidence-content" id="evRequest">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- STATUS BAR -->
+<div class="status-bar">
+  <div class="stat">Model: <span class="val amber" id="statModel">gpt-4o</span></div>
+  <span class="stat-sep">·</span>
+  <div class="stat">Turns: <span class="val" id="statTurns">0</span></div>
+  <span class="stat-sep">·</span>
+  <div class="stat">PII blocked: <span class="val" id="statPII">0</span></div>
+  <span class="stat-sep">·</span>
+
+  <!-- Mode toggle -->
+  <div class="mode-toggle" id="modeToggle" style="display:none">
+    <button class="mode-btn mode-without" id="btnWithout" onclick="setMode('without')">Without Angelina</button>
+    <button class="mode-btn mode-with active" id="btnWith" onclick="setMode('with')">With Angelina</button>
+  </div>
+  <div class="stat" id="modeEmpty" style="color:var(--text-dim);font-size:11px;font-family:var(--mono)">Send messages to compare modes</div>
+
+  <div style="flex:1"></div>
+
+  <button class="btn-action btn-summarize" id="btnSummarize" onclick="runSummarizer()">⚡ Run Summarizer</button>
+  <button class="btn-action btn-report" onclick="viewReport()">📋 View Full Report</button>
+</div>
+
+<!-- CHAT INPUT -->
+<div class="chat-input-wrap">
+  <input type="file" id="fileInput" accept=".txt,.pdf,.doc,.docx" onchange="handleFile(event)">
+  <button class="btn-upload" onclick="document.getElementById('fileInput').click()" title="Upload document">📎</button>
+  <input class="chat-input" id="chatInput" type="text" placeholder="Message Angelina..." onkeydown="if(event.key==='Enter')sendMessage()">
+  <button class="btn-send" id="btnSend" onclick="sendMessage()">Send →</button>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">FULL AUDIT REPORT</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <div style="color:var(--text-dim);font-family:var(--mono);font-size:12px;text-align:center;padding:40px">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// CONFIG
+// ─────────────────────────────────────────────
+const CONFIG = {
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbyGb_st4Hp504IAHAEe4cg12X2RJXJ4drIdoOzHqVPJuJ_UtaNpLsS4u6huHXXdB-_0/exec'
+};
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let STATE = {
+  user: 'Maya',
+  role: 'Legal VIP',
+  model: 'gpt-4o',
+  budget_daily: 50,
+  word_limit: 5000,
+  retention_level: 'high',
+  budget_pct: 0,
+  turns: 0,
+  pii_blocked: 0,
+  full_history_words: 0,
+  summary_words: 0,
+  history: [],  // last N turns for conversational context
+  session_id: 'demo-' + Date.now()
+};
+
+// ─────────────────────────────────────────────
+// JSONP HELPER
+// ─────────────────────────────────────────────
+function callScript(payload, callback) {
+  const cbName = '_cb_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+  window[cbName] = function(data) {
+    delete window[cbName];
+    if (script.parentNode) script.parentNode.removeChild(script);
+    callback(data);
+  };
+  const script = document.createElement('script');
+  script.onerror = function() {
+    delete window[cbName];
+    callback({ status: 'error', error: 'Network error' });
+  };
+  script.src = CONFIG.APPS_SCRIPT_URL +
+    '?callback=' + cbName +
+    '&payload=' + encodeURIComponent(JSON.stringify(payload));
+  document.body.appendChild(script);
+}
+
+// ─────────────────────────────────────────────
+// USER SWITCH
+// ─────────────────────────────────────────────
+function switchUser(user) {
+  // Update tab UI
+  document.querySelectorAll('.user-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + user).classList.add('active');
+
+  // Reset chat UI
+  document.getElementById('msgWrap').innerHTML = '';
+  document.getElementById('summaryText').textContent = '';
+  document.getElementById('summaryEmpty').style.display = 'block';
+  document.getElementById('evidencePack').style.display = 'none';
+  document.getElementById('evidenceEmpty').style.display = 'block';
+  updateWordCounts(0, 0, 0);
+
+  STATE.user = user;
+  STATE.history = [];
+  STATE.turns = 0;
+  STATE.pii_blocked = 0;
+  STATE.mode = 'with';
+  STATE.lastCleanMessage = '';
+  STATE.lastPIIFound = false;
+  document.getElementById('statTurns').textContent = '0';
+  document.getElementById('statPII').textContent = '0';
+  document.getElementById('modeToggle').style.display = 'none';
+  document.getElementById('modeEmpty').style.display = 'block';
+  document.getElementById('btnWith').classList.add('active');
+  document.getElementById('btnWithout').classList.remove('active');
+  document.querySelector('.panel:nth-child(3)').style.borderLeft = '2px solid var(--teal-border)';
+
+  // Load user config + existing summary
+  callScript({ action: 'clear_history', user: user }, function(data) {
+    if (data.status === 'ok') {
+      STATE.role = data.role;
+      STATE.model = data.model;
+      STATE.budget_daily = data.budget_daily;
+      STATE.word_limit = data.word_limit;
+      // Update word limit display
+      document.getElementById('wcLimit').textContent = Number(data.word_limit).toLocaleString();
+      STATE.retention_level = data.retention_level;
+
+      // Update policy pills
+      document.getElementById('pillRole').textContent = data.role;
+      document.getElementById('pillModel').textContent = data.model;
+      document.getElementById('pillBudget').textContent = '$' + data.budget_daily + '/day';
+      document.getElementById('pillRetention').textContent = 'retention: ' + data.retention_level.toUpperCase();
+      document.getElementById('statModel').textContent = data.model;
+
+      // Load existing summary if any
+      if (data.summary && data.summary.trim()) {
+        showSummary(data.summary, data.summary_words);
+      }
+
+      // Refresh budget
+      refreshBudget();
+    }
+  });
+}
+
+// ─────────────────────────────────────────────
+// SEND MESSAGE
+// ─────────────────────────────────────────────
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  if (!message) return;
+
+  // Check budget first
+  if (STATE.budget_pct >= 100) {
+    showAlert('Budget exceeded for ' + STATE.user + '. Request blocked.');
+    return;
+  }
+
+  input.value = '';
+  setInputDisabled(true);
+
+  // Show user message in panel 1
+  addMessage('user', message);
+
+  // Show typing
+  const typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  typing.id = 'typing';
+  document.getElementById('msgWrap').appendChild(typing);
+  scrollPanel1();
+
+  // Call Apps Script
+  const payload = {
+    action: 'chat',
+    user: STATE.user,
+    session_id: STATE.session_id,
+    message: message,
+    history: STATE.history.slice(-6)
+  };
+
+  callScript(payload, function(data) {
+    // Remove typing
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+
+    if (data.status === 'blocked') {
+      showAlert('⚠️ ' + (data.message || 'Budget exceeded — request blocked.'));
+      updateBudgetUI(100);
+      setInputDisabled(false);
+      return;
+    }
+
+    if (data.status === 'error') {
+      addMessage('system', '⚠️ Error: ' + data.error);
+      setInputDisabled(false);
+      return;
+    }
+
+    // Show assistant reply
+    addMessage('assistant', data.reply);
+
+    // Update history for context
+    STATE.history.push({ role: 'user', content: message });
+    STATE.history.push({ role: 'assistant', content: data.reply });
+    if (STATE.history.length > 12) STATE.history = STATE.history.slice(-12);
+
+    // Update stats
+    STATE.turns++;
+    document.getElementById('statTurns').textContent = STATE.turns;
+
+    if (data.pii_found) {
+      STATE.pii_blocked++;
+      document.getElementById('statPII').textContent = STATE.pii_blocked;
+    }
+
+    // Update word counts
+    STATE.full_history_words = data.full_history_words || STATE.full_history_words;
+    STATE.summary_words = data.summary_words || STATE.summary_words;
+
+
+    // Use actual tokens_in from server (converted to words) — this is what was REALLY sent to LLM
+    const sentWords = data.sent_to_llm_words || 0;
+    const cleanMsg = data.clean_message || message;
+
+    updateWordCounts(STATE.full_history_words, STATE.summary_words, sentWords);
+
+    if (STATE.full_history_words > 0 && sentWords > 0) {
+      updateComparisonBars(STATE.full_history_words, sentWords);
+    }
+
+    // Update panel 3 — evidence pack
+    STATE.lastCleanMessage = cleanMsg;
+    STATE.lastPIIFound = data.pii_found || false;
+    if (!STATE.mode || STATE.mode === 'with') {
+      showEvidencePack(cleanMsg, data.pii_found);
+    }
+
+    // Show mode toggle after first message
+    if (STATE.full_history_words > 0) {
+      document.getElementById('modeToggle').style.display = 'flex';
+      document.getElementById('modeEmpty').style.display = 'none';
+    }
+
+    // Budget
+    updateBudgetUI(data.budget_pct || 0);
+    if (data.budget_alert) {
+      showAlert('⚠️ Budget alert: ' + STATE.user + ' is at ' + data.budget_pct + '% of daily limit');
+    }
+
+    setInputDisabled(false);
+    document.getElementById('chatInput').focus();
+  });
+}
+
+// ─────────────────────────────────────────────
+// RUN SUMMARIZER
+// ─────────────────────────────────────────────
+function runSummarizer() {
+  document.getElementById('btnSummarize').disabled = true;
+  document.getElementById('summarizingOverlay').classList.add('active');
+
+  callScript({ action: 'summarize', user: STATE.user }, function(data) {
+    document.getElementById('summarizingOverlay').classList.remove('active');
+    document.getElementById('btnSummarize').disabled = false;
+
+    if (data.status === 'ok' && data.summary) {
+      showSummary(data.summary, data.word_count);
+      STATE.summary_words = data.word_count;
+      updateWordCounts(STATE.full_history_words, data.word_count, null);
+
+      // Update comparison bars after summarization
+      if (STATE.full_history_words > 0 && data.word_count > 0) {
+        updateComparisonBars(STATE.full_history_words, data.word_count);
+      }
+    } else {
+      showAlert('Nothing to summarize yet — send some messages first.');
+    }
+  });
+}
+
+// ─────────────────────────────────────────────
+// VIEW REPORT
+// ─────────────────────────────────────────────
+function viewReport() {
+  document.getElementById('modalOverlay').classList.add('open');
+  document.getElementById('modalBody').innerHTML = '<div style="color:var(--text-dim);font-family:var(--mono);font-size:12px;text-align:center;padding:40px">Loading audit log...</div>';
+
+  callScript({ action: 'get_audit', user: STATE.user }, function(data) {
+    if (data.status !== 'ok' || !data.rows || data.rows.length === 0) {
+      document.getElementById('modalBody').innerHTML = '<div style="color:var(--text-dim);font-family:var(--mono);font-size:12px;text-align:center;padding:40px">No audit records yet.</div>';
+      return;
+    }
+
+    const rows = data.rows.slice().reverse(); // newest first
+    let html = '<table class="audit-table"><thead><tr>' +
+      '<th>Time</th><th>User</th><th>Model</th>' +
+      '<th>Tokens In</th><th>Tokens Out</th><th>Cost</th>' +
+      '<th>PII</th><th>Decision</th><th>Request</th>' +
+      '</tr></thead><tbody>';
+
+    rows.forEach(function(r) {
+      const ts = r.timestamp ? new Date(r.timestamp).toLocaleTimeString() : '—';
+      const piiClass = String(r.pii_found) === 'YES' ? 'pii-yes' : '';
+      html += '<tr>' +
+        '<td>' + ts + '</td>' +
+        '<td>' + (r.user || '—') + '</td>' +
+        '<td class="model-name">' + (r.model || '—') + '</td>' +
+        '<td>' + (r.tokens_in || 0) + '</td>' +
+        '<td>' + (r.tokens_out || 0) + '</td>' +
+        '<td>$' + (Number(r.cost_usd || 0).toFixed(5)) + '</td>' +
+        '<td class="' + piiClass + '">' + (r.pii_found || 'NO') + '</td>' +
+        '<td>' + (r.decision || '—') + '</td>' +
+        '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis">' + (r.request_preview || '—') + '</td>' +
+        '</tr>';
+    });
+
+    html += '</tbody></table>';
+    document.getElementById('modalBody').innerHTML = html;
+  });
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+// ─────────────────────────────────────────────
+// FILE UPLOAD
+// ─────────────────────────────────────────────
+function handleFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const content = e.target.result;
+    const preview = content.substring(0, 500);
+    document.getElementById('chatInput').value = '[Document: ' + file.name + ']\n' + preview + (content.length > 500 ? '...' : '');
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ─────────────────────────────────────────────
+// UI HELPERS
+// ─────────────────────────────────────────────
+function addMessage(type, text) {
+  const wrap = document.getElementById('msgWrap');
+  const div = document.createElement('div');
+  div.className = 'msg ' + type;
+
+  // Highlight REDACTED tokens in amber
+  const highlighted = text.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY|ID_REDACTED|PHONE_REDACTED|EMAIL_REDACTED|ZIP_REDACTED)\]/g,
+    '<span class="redacted">[$1]</span>');
+  div.innerHTML = highlighted;
+  wrap.appendChild(div);
+  scrollPanel1();
+
+  // Update word count
+  const words = text.split(/\s+/).filter(w => w.length > 0).length;
+  STATE.full_history_words += words;
+  updateWordCounts(STATE.full_history_words, STATE.summary_words, null);
+}
+
+function scrollPanel1() {
+  const p = document.getElementById('panel1');
+  setTimeout(() => { p.scrollTop = p.scrollHeight; }, 50);
+}
+
+function showSummary(text, wordCount) {
+  document.getElementById('summaryEmpty').style.display = 'none';
+  const el = document.getElementById('summaryText');
+  el.innerHTML = text.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY)\]/g,
+    '<span class="redacted">[$1]</span>');
+  const limit = STATE.word_limit || 5000;
+  document.getElementById('wc2').innerHTML = wordCount + ' / <span id="wcLimit">' + Number(limit).toLocaleString() + '</span> words';
+}
+
+function showEvidencePack(cleanMessage, piiFound) {
+  document.getElementById('evidenceEmpty').style.display = 'none';
+  const pack = document.getElementById('evidencePack');
+  pack.style.display = 'block';
+
+  const summaryText = document.getElementById('summaryText').textContent;
+  document.getElementById('evSummary').textContent = summaryText || '(no summary yet — send more messages then run summarizer)';
+
+  const msgEl = document.getElementById('evRequest');
+  if (piiFound) {
+    msgEl.innerHTML = cleanMessage.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY)\]/g,
+      '<span class="pii-badge">[$1]</span>');
+  } else {
+    msgEl.textContent = cleanMessage;
+  }
+
+  // Update panel 3 word count
+  const words = cleanMessage.split(/\s+/).filter(w => w.length > 0).length +
+    (summaryText ? summaryText.split(/\s+/).filter(w => w.length > 0).length : 0);
+  document.getElementById('wc3').textContent = words + ' words';
+}
+
+function setMode(mode) {
+  STATE.mode = mode;
+  document.getElementById('btnWith').classList.toggle('active', mode === 'with');
+  document.getElementById('btnWithout').classList.toggle('active', mode === 'without');
+
+  if (mode === 'without') {
+    // Show full history in panel 3
+    const fullHistory = Array.from(document.querySelectorAll('.msg'))
+      .map(m => m.textContent).join('\n');
+    document.getElementById('evidenceEmpty').style.display = 'none';
+    document.getElementById('evidencePack').style.display = 'block';
+    document.getElementById('evSummary').textContent = '(disabled — full history sent instead)';
+    document.getElementById('evSummary').style.color = 'var(--text-dim)';
+
+    // Show all messages in panel 3 with red tint
+    document.getElementById('evRequest').innerHTML =
+      '<span style="color:#f09595;font-size:11px;font-weight:700">⚠ ALL ' + STATE.full_history_words + ' WORDS SENT TO LLM</span>\n\n' +
+      fullHistory.substring(0, 600) + (fullHistory.length > 600 ? '\n...' : '');
+    document.getElementById('wc3').textContent = STATE.full_history_words + ' words';
+    document.getElementById('wc3').style.color = '#f09595';
+
+    // Panel 3 border red
+    document.querySelector('.panel:nth-child(3)').style.borderLeft = '2px solid var(--red)';
+
+  } else {
+    // Restore With Angelina view
+    document.getElementById('wc3').style.color = '';
+    document.querySelector('.panel:nth-child(3)').style.borderLeft = '2px solid var(--teal-border)';
+    document.getElementById('evSummary').style.color = '';
+    // Re-show last clean message
+    const lastClean = STATE.lastCleanMessage || '';
+    const lastPII = STATE.lastPIIFound || false;
+    if (lastClean) showEvidencePack(lastClean, lastPII);
+  }
+}
+
+function updateComparisonBars(fullWords, sentWords) {
+  // kept for compatibility but no longer renders bars
+}
+
+function updateWordCounts(full, summary, sent) {
+  if (full !== null) document.getElementById('wc1').textContent = full + ' words';
+  if (summary !== null) {
+    const limit = STATE.word_limit || 5000;
+    const el = document.getElementById('wc2');
+    el.innerHTML = summary + ' / <span id="wcLimit">' + Number(limit).toLocaleString() + '</span> words';
+    el.className = 'word-count' + (summary > limit * 0.9 ? ' highlight' : '');
+  }
+  if (sent !== null) document.getElementById('wc3').textContent = sent + ' words';
+}
+
+function updateBudgetUI(pct) {
+  STATE.budget_pct = pct;
+  const bar = document.getElementById('budgetBar');
+  const label = document.getElementById('budgetPct');
+  bar.style.width = pct + '%';
+  bar.className = 'budget-bar-inner' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warn' : '');
+  label.textContent = pct + '%';
+  label.className = 'budget-pct' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warn' : '');
+}
+
+function refreshBudget() {
+  callScript({ action: 'get_budget', user: STATE.user }, function(data) {
+    if (data.status === 'ok') updateBudgetUI(data.budget_pct || 0);
+  });
+}
+
+function showAlert(msg) {
+  const banner = document.getElementById('alertBanner');
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  setTimeout(() => { banner.style.display = 'none'; }, 4000);
+}
+
+function setInputDisabled(disabled) {
+  document.getElementById('chatInput').disabled = disabled;
+  document.getElementById('btnSend').disabled = disabled;
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+// Warmup Apps Script on load
+if (CONFIG.APPS_SCRIPT_URL) {
+  try {
+    const ws = document.createElement('script');
+    ws.src = CONFIG.APPS_SCRIPT_URL + '?callback=_warmup&payload=' + encodeURIComponent(JSON.stringify({ warmup: 1 }));
+    window._warmup = function() { delete window._warmup; if (ws.parentNode) ws.parentNode.removeChild(ws); };
+    ws.onerror = function() { if (ws.parentNode) ws.parentNode.removeChild(ws); };
+    setTimeout(() => document.body.appendChild(ws), 800);
+  } catch(e) {}
+}
+
+// Load initial user config
+switchUser('Maya');
+</script>
+</body>
+</html>
