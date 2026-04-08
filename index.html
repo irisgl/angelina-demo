@@ -322,7 +322,6 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .stat .val.amber { color: var(--amber-light); }
 .stat-sep { color: var(--border); font-size: 16px; }
 
-  
 .btn-action {
   padding: 6px 14px;
   border-radius: 5px;
@@ -944,7 +943,7 @@ function viewReport() {
       '</tr></thead><tbody>';
 
     rows.forEach(function(r) {
-      const ts = r.timestamp ? new Date(r.timestamp).toLocaleTimeString() : '—';
+      const ts = r.timestamp ? String(r.timestamp) : '—';
       const piiClass = String(r.pii_found) === 'YES' ? 'pii-yes' : '';
       html += '<tr>' +
         '<td>' + ts + '</td>' +
