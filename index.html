@@ -346,6 +346,12 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   color: var(--teal-mid);
 }
 .btn-report:hover { background: var(--teal-dark); color: var(--teal-light); }
+.btn-reset {
+  background: var(--bg3);
+  border-color: #5a1a1a;
+  color: #f09595;
+}
+.btn-reset:hover { background: var(--red-bg); color: #f09595; border-color: var(--red); }
 
 /* ── CHAT INPUT ── */
 .chat-input-wrap {
@@ -647,6 +653,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 
   <button class="btn-action btn-summarize" id="btnSummarize" onclick="runSummarizer()">⚡ Run Summarizer</button>
   <button class="btn-action btn-report" onclick="viewReport()">📋 View Full Report</button>
+  <button class="btn-action btn-reset" onclick="resetAll()">🗑 Reset All</button>
 </div>
 
 <!-- CHAT INPUT -->
@@ -1070,8 +1077,48 @@ function setMode(mode) {
   }
 }
 
-function updateComparisonBars(fullWords, sentWords) {
-  // kept for compatibility but no longer renders bars
+function resetAll() {
+  if (!confirm('Reset everything? This will clear all conversations, summaries and audit logs from Google Sheets.')) return;
+
+  setInputDisabled(true);
+  callScript({ action: 'reset_all' }, function(data) {
+    setInputDisabled(false);
+    if (data.status === 'ok') {
+      // Clear all panels
+      document.getElementById('msgWrap').innerHTML = '';
+      document.getElementById('summaryText').textContent = '';
+      document.getElementById('summaryEmpty').style.display = 'block';
+      document.getElementById('evidencePack').style.display = 'none';
+      document.getElementById('evidenceEmpty').style.display = 'block';
+      document.getElementById('evidenceEmpty').textContent = 'Waiting for first message...';
+
+      // Reset state
+      STATE.full_history_words = 0;
+      STATE.summary_words = 0;
+      STATE.turns = 0;
+      STATE.pii_blocked = 0;
+      STATE.history = [];
+      STATE.mode = 'with';
+      STATE.lastCleanMessage = '';
+      STATE.lastPIIFound = false;
+
+      // Reset UI
+      updateWordCounts(0, 0, 0);
+      updateBudgetUI(0);
+      document.getElementById('statTurns').textContent = '0';
+      document.getElementById('statPII').textContent = '0';
+      document.getElementById('modeToggle').style.display = 'none';
+      document.getElementById('modeEmpty').style.display = 'block';
+      document.getElementById('btnWith').classList.add('active');
+      document.getElementById('btnWithout').classList.remove('active');
+      document.querySelector('.panel:nth-child(3)').style.borderLeft = '2px solid var(--teal-border)';
+      document.getElementById('wc3').style.color = '';
+
+      showAlert('✓ All data cleared — ready for a fresh demo');
+    } else {
+      showAlert('⚠️ Reset failed: ' + (data.error || 'unknown error'));
+    }
+  });
 }
 
 function updateWordCounts(full, summary, sent) {
