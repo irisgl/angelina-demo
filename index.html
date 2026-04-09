@@ -1147,9 +1147,10 @@ function renderSummaryPII(text) {
     });
 }
 
-// Panel 3 — clean text, no inline markers
+// Panel 3 — clean text, no markers at all
 function renderCleanPII(text) {
-  return text.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY|ID_REDACTED|PHONE_REDACTED|EMAIL_REDACTED|ZIP_REDACTED)\]/g, '___');
+  return text.replace(/\s*\[([\w_]+_REDACTED|NAME|ADDRESS|CITY|ID_REDACTED|PHONE_REDACTED|EMAIL_REDACTED|ZIP_REDACTED)\]\s*/g, ' ')
+             .replace(/\s{2,}/g, ' ').trim();
 }
 
 // Panel 1 (full history) — subtle inline
