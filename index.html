@@ -7,27 +7,27 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a0f0d;
-  --bg2: #0e1511;
-  --bg3: #111a14;
-  --card: #131d16;
+  --bg: #f5f7f5;
+  --bg2: #ffffff;
+  --bg3: #f0f4f1;
+  --card: #ffffff;
   --teal: #1d9e75;
-  --teal-light: #9fe1cb;
-  --teal-mid: #5dcaa5;
-  --teal-dark: #0b2a22;
-  --teal-border: #1d4a35;
+  --teal-light: #0b5e44;
+  --teal-mid: #1a8a63;
+  --teal-dark: #e8f7f1;
+  --teal-border: #b2dece;
   --purple: #7f77dd;
-  --purple-light: #cecbf6;
-  --purple-dark: #13102a;
-  --purple-border: #3a3580;
-  --amber: #ef9f27;
-  --amber-light: #fac775;
-  --red: #e24b4a;
-  --red-bg: #1a0808;
+  --purple-light: #4a44a0;
+  --purple-dark: #f0f0fd;
+  --purple-border: #c5c2f0;
+  --amber: #d4780a;
+  --amber-light: #9a5500;
+  --red: #c0392b;
+  --red-bg: #fdf0ef;
   --white: #ffffff;
-  --text: #e8f4ef;
-  --text-dim: #5a8a72;
-  --border: #1a2e22;
+  --text: #1a2e22;
+  --text-dim: #6b8a78;
+  --border: #d4e6dc;
   --mono: 'JetBrains Mono', monospace;
   --sans: 'Inter', sans-serif;
 }
@@ -98,7 +98,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   border-radius: 4px;
   color: var(--teal-mid);
 }
-.policy-strip .pill.model { color: var(--amber-light); }
+.policy-strip .pill.model { color: var(--amber); }
 
 /* Budget bar */
 .budget-wrap {
@@ -212,16 +212,16 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   white-space: pre-wrap;
 }
 @keyframes msgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-.msg.user { background: var(--bg3); border: 1px solid var(--border); align-self: flex-end; max-width: 88%; color: var(--text); }
+.msg.user { background: #f0f4f1; border: 1px solid var(--border); align-self: flex-end; max-width: 88%; color: var(--text); }
 .msg.assistant { background: var(--teal-dark); border: 1px solid var(--teal-border); align-self: flex-start; max-width: 92%; color: var(--teal-light); }
-.msg.system { background: var(--red-bg); border: 1px solid #5a1a1a; align-self: center; max-width: 90%; color: #f09595; font-size: 12px; text-align: center; border-radius: 6px; }
+.msg.system { background: var(--red-bg); border: 1px solid #f5c0bb; align-self: center; max-width: 90%; color: #c0392b; font-size: 12px; text-align: center; border-radius: 6px; }
 
 /* PII badge */
 .pii-badge {
   display: inline-block;
-  background: #2a1a00;
+  background: #fff8e6;
   border: 1px solid var(--amber);
-  color: var(--amber-light);
+  color: var(--amber);
   font-family: var(--mono);
   font-size: 10px;
   padding: 1px 6px;
@@ -244,7 +244,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   margin-top: 40px;
 }
 .redacted {
-  background: #2a1a00;
+  background: #fff8e6;
   border: 1px solid var(--amber);
   color: var(--amber);
   font-family: var(--mono);
@@ -319,7 +319,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   gap: 6px;
 }
 .stat .val { color: var(--teal-light); font-weight: 600; }
-.stat .val.amber { color: var(--amber-light); }
+.stat .val.amber { color: var(--amber); }
 .stat-sep { color: var(--border); font-size: 16px; }
 
 .btn-action {
@@ -336,7 +336,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .btn-summarize {
   background: var(--purple-dark);
   border-color: var(--purple);
-  color: var(--purple-light);
+  color: var(--purple);
 }
 .btn-summarize:hover { background: var(--purple); color: #fff; }
 .btn-summarize:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -362,6 +362,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   gap: 8px;
   align-items: center;
   height: 50px;
+  position: relative;
 }
 .chat-input {
   flex: 1;
@@ -429,7 +430,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.4);
   z-index: 500;
   align-items: center;
   justify-content: center;
@@ -498,14 +499,14 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 }
 .audit-table tr:hover td { background: var(--bg3); }
 .audit-table td.pii-yes { color: var(--amber); }
-.audit-table td.model-name { color: var(--amber-light); }
+.audit-table td.model-name { color: var(--amber); }
 
 /* Summarizing overlay on panel 2 */
 .summarizing-overlay {
   display: none;
   position: absolute;
   inset: 0;
-  background: rgba(10,15,13,0.85);
+  background: rgba(245,247,245,0.92);
   align-items: center;
   justify-content: center;
   flex-direction: column;
@@ -544,7 +545,7 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 .summarizing-text {
   font-family: var(--mono);
   font-size: 12px;
-  color: var(--purple-light);
+  color: var(--purple);
   animation: pulse 1.5s infinite;
 }
 @keyframes pulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
@@ -596,9 +597,15 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 
   <!-- Panel 2: Angelina Summary -->
   <div class="panel">
-    <div class="panel-header">
-      <span class="panel-title purple">Angelina Summary</span>
-      <span class="word-count" id="wc2">0 / <span id="wcLimit">5,000</span> words</span>
+    <div class="panel-header" style="flex-direction:column;align-items:stretch;gap:4px;padding-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="panel-title purple">Angelina Summary</span>
+        <span class="word-count" id="wc2">0 / <span id="wcLimit">5,000</span> words</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center" id="withoutRow" style="display:none">
+        <span style="font-family:var(--mono);font-size:9px;color:#f09595;letter-spacing:0.06em">WITHOUT ANGELINA</span>
+        <span style="font-family:var(--mono);font-size:11px;font-weight:600;color:#f09595" id="wcWithout">— words</span>
+      </div>
     </div>
     <div class="panel-body" id="panel2">
       <div class="summary-empty" id="summaryEmpty">No summary yet — send a few messages then click Run Summarizer</div>
@@ -616,17 +623,38 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
       <span class="panel-title green">Sent to LLM</span>
       <span class="word-count highlight" id="wc3">0 words</span>
     </div>
-    <div class="panel-body" id="panel3">
-      <div class="summary-empty" id="evidenceEmpty">Waiting for first message...</div>
-      <div class="evidence-pack" id="evidencePack" style="display:none">
-        <div class="evidence-section">
-          <div class="evidence-label">Context (summary)</div>
-          <div class="evidence-content" id="evSummary">—</div>
+    <div class="panel-body" id="panel3" style="padding:0">
+      <div class="summary-empty" id="evidenceEmpty" style="padding:14px 16px">Waiting for first message...</div>
+      <div id="evidencePack" style="display:none;height:100%;display:grid;grid-template-columns:1fr 1fr;gap:0">
+
+        <!-- Left: With Angelina -->
+        <div style="padding:12px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:8px;overflow-y:auto">
+          <div style="font-family:var(--mono);font-size:9px;font-weight:700;color:var(--teal-mid);letter-spacing:0.1em">WITH ANGELINA</div>
+          <div class="evidence-section">
+            <div class="evidence-label">Context (summary)</div>
+            <div class="evidence-content" id="evSummary">—</div>
+          </div>
+          <div class="evidence-section">
+            <div class="evidence-label">Request (PII cleaned)</div>
+            <div class="evidence-content" id="evRequest">—</div>
+          </div>
+          <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--teal-light);margin-top:auto;padding-top:8px;border-top:1px solid var(--teal-border)">
+            ✓ <span id="wcWith3">0</span> words sent
+          </div>
         </div>
-        <div class="evidence-section">
-          <div class="evidence-label">Current request (PII cleaned)</div>
-          <div class="evidence-content" id="evRequest">—</div>
+
+        <!-- Right: Without Angelina -->
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;background:rgba(192,57,43,0.06)">
+          <div style="font-family:var(--mono);font-size:9px;font-weight:700;color:#f09595;letter-spacing:0.1em">WITHOUT ANGELINA</div>
+          <div class="evidence-section">
+            <div class="evidence-label" style="color:#f09595">Full history sent</div>
+            <div class="evidence-content" id="evWithout" style="color:#f09595;border-color:#c0392b;background:var(--red-bg)">No messages yet</div>
+          </div>
+          <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:#f09595;margin-top:auto;padding-top:8px;border-top:1px solid #f5c0bb">
+            ✗ <span id="wcWithout3">0</span> words would be sent
+          </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -640,14 +668,6 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
   <div class="stat">Turns: <span class="val" id="statTurns">0</span></div>
   <span class="stat-sep">·</span>
   <div class="stat">PII blocked: <span class="val" id="statPII">0</span></div>
-  <span class="stat-sep">·</span>
-
-  <!-- Mode toggle -->
-  <div class="mode-toggle" id="modeToggle" style="display:none">
-    <button class="mode-btn mode-without" id="btnWithout" onclick="setMode('without')">Without Angelina</button>
-    <button class="mode-btn mode-with active" id="btnWith" onclick="setMode('with')">With Angelina</button>
-  </div>
-  <div class="stat" id="modeEmpty" style="color:var(--text-dim);font-size:11px;font-family:var(--mono)">Send messages to compare modes</div>
 
   <div style="flex:1"></div>
 
@@ -659,6 +679,16 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
 <!-- CHAT INPUT -->
 <div class="chat-input-wrap">
   <input type="file" id="fileInput" accept=".txt,.pdf,.doc,.docx" onchange="handleFile(event)">
+
+  <!-- File badge (shown when file loaded) -->
+  <div id="fileBadge" style="display:none;position:absolute;bottom:100%;left:16px;right:16px;margin-bottom:4px;
+    background:#fff8e6;border:1px solid var(--amber);border-radius:6px;
+    padding:6px 12px;font-family:var(--mono);font-size:11px;color:var(--amber);
+    display:none;align-items:center;gap:8px;justify-content:space-between">
+    <span>📎 <span id="fileBadgeName"></span></span>
+    <button onclick="clearFile()" style="background:none;border:none;cursor:pointer;color:var(--amber);font-size:14px;padding:0;line-height:1">✕</button>
+  </div>
+
   <button class="btn-upload" onclick="document.getElementById('fileInput').click()" title="Upload document">📎</button>
   <input class="chat-input" id="chatInput" type="text" placeholder="Message Angelina..." onkeydown="if(event.key==='Enter')sendMessage()">
   <button class="btn-send" id="btnSend" onclick="sendMessage()">Send →</button>
@@ -701,6 +731,7 @@ let STATE = {
   full_history_words: 0,
   summary_words: 0,
   history: [],  // last N turns for conversational context
+  pendingFile: null,
   session_id: 'demo-' + Date.now()
 };
 
@@ -746,22 +777,14 @@ function switchUser(user) {
   STATE.history = [];
   STATE.turns = 0;
   STATE.pii_blocked = 0;
-  STATE.mode = 'with';
-  STATE.lastCleanMessage = '';
-  STATE.lastPIIFound = false;
   document.getElementById('statTurns').textContent = '0';
   document.getElementById('statPII').textContent = '0';
-  document.getElementById('modeToggle').style.display = 'none';
-  document.getElementById('modeEmpty').style.display = 'block';
-  document.getElementById('btnWith').classList.add('active');
-  document.getElementById('btnWithout').classList.remove('active');
   document.querySelector('.panel:nth-child(3)').style.borderLeft = '2px solid var(--teal-border)';
 
   // Load user config + existing summary
   callScript({ action: 'clear_history', user: user }, function(data) {
     if (data.status === 'ok') {
       STATE.role = data.role;
-      STATE.model = data.model;
       STATE.budget_daily = data.budget_daily;
       STATE.word_limit = data.word_limit;
       // Update word limit display
@@ -791,7 +814,19 @@ function switchUser(user) {
 // ─────────────────────────────────────────────
 function sendMessage() {
   const input = document.getElementById('chatInput');
-  const message = input.value.trim();
+  const typedMessage = input.value.trim();
+
+  // Save pending file info before clearing
+  const pendingFile = STATE.pendingFile;
+
+  // Build full message — limit file content to 500 words to avoid JSONP URL limit
+  let message = typedMessage;
+  if (pendingFile) {
+    const shortContent = pendingFile.content.split(/\s+/).slice(0, 500).join(' ');
+    const filePrefix = '[Document: ' + pendingFile.name + ']\n' + shortContent;
+    message = typedMessage ? filePrefix + '\n\n' + typedMessage : filePrefix;
+  }
+
   if (!message) return;
 
   // Check budget first
@@ -801,10 +836,14 @@ function sendMessage() {
   }
 
   input.value = '';
+  clearFile();
   setInputDisabled(true);
 
-  // Show user message in panel 1
-  addMessage('user', message);
+  // Show user message in panel 1 — badge only, not full content
+  const displayMsg = pendingFile
+    ? '📎 ' + pendingFile.name + (typedMessage ? '\n' + typedMessage : '')
+    : message;
+  addMessage('user', displayMsg);
 
   // Show typing
   const typing = document.createElement('div');
@@ -820,7 +859,7 @@ function sendMessage() {
     user: STATE.user,
     session_id: STATE.session_id,
     message: message,
-    history: STATE.history.slice(-6)
+    history: [] // Apps Script reads history from Sheets directly
   };
 
   callScript(payload, function(data) {
@@ -869,22 +908,8 @@ function sendMessage() {
 
     updateWordCounts(STATE.full_history_words, STATE.summary_words, sentWords);
 
-    if (STATE.full_history_words > 0 && sentWords > 0) {
-      
-    }
-
     // Update panel 3 — evidence pack
-    STATE.lastCleanMessage = cleanMsg;
-    STATE.lastPIIFound = data.pii_found || false;
-    if (!STATE.mode || STATE.mode === 'with') {
-      showEvidencePack(cleanMsg, data.pii_found);
-    }
-
-    // Show mode toggle after first message
-    if (STATE.full_history_words > 0) {
-      document.getElementById('modeToggle').style.display = 'flex';
-      document.getElementById('modeEmpty').style.display = 'none';
-    }
+    showEvidencePack(cleanMsg, data.pii_found);
 
     // Budget
     updateBudgetUI(data.budget_pct || 0);
@@ -974,28 +999,173 @@ function closeModal() {
 function handleFile(event) {
   const file = event.target.files[0];
   if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const content = e.target.result;
-    const preview = content.substring(0, 500);
-    document.getElementById('chatInput').value = '[Document: ' + file.name + ']\n' + preview + (content.length > 500 ? '...' : '');
-  };
-  reader.readAsText(file);
   event.target.value = '';
+
+  const ext = file.name.split('.').pop().toLowerCase();
+  setInputDisabled(true);
+  showAlert('📎 Reading ' + file.name + '...');
+
+  if (ext === 'txt') {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      processDocumentText(file.name, e.target.result);
+    };
+    reader.readAsText(file);
+
+  } else if (ext === 'docx' || ext === 'doc') {
+    // Load mammoth first, then read file
+    const doReadDocx = function() {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        window.mammoth.extractRawText({ arrayBuffer: e.target.result })
+          .then(function(result) {
+            processDocumentText(file.name, result.value);
+          })
+          .catch(function(err) {
+            showAlert('⚠️ Could not extract text from .docx');
+            setInputDisabled(false);
+          });
+      };
+      reader.onerror = function() { showAlert('⚠️ Could not read file'); setInputDisabled(false); };
+      reader.readAsArrayBuffer(file);
+    };
+
+    if (window.mammoth) {
+      doReadDocx();
+    } else {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js';
+      s.onload = doReadDocx;
+      s.onerror = function() { showAlert('⚠️ Could not load docx reader (check internet connection)'); setInputDisabled(false); };
+      document.head.appendChild(s);
+    }
+
+  } else if (ext === 'pdf') {
+    // Use pdf.js for pdf
+    const loadPdfJs = function(cb) {
+      if (window.pdfjsLib) { cb(); return; }
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      s.onload = function() {
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        cb();
+      };
+      s.onerror = function() { showAlert('⚠️ Could not load PDF reader'); setInputDisabled(false); };
+      document.head.appendChild(s);
+    };
+
+    loadPdfJs(function() {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        pdfjsLib.getDocument({ data: e.target.result }).promise.then(function(pdf) {
+          const pages = [];
+          const total = pdf.numPages;
+          let done = 0;
+          for (let i = 1; i <= total; i++) {
+            pdf.getPage(i).then(function(page) {
+              page.getTextContent().then(function(tc) {
+                pages.push(tc.items.map(function(s) { return s.str; }).join(' '));
+                done++;
+                if (done === total) processDocumentText(file.name, pages.join('\n'));
+              });
+            });
+          }
+        }).catch(function() { showAlert('⚠️ Could not read PDF'); setInputDisabled(false); });
+      };
+      reader.readAsArrayBuffer(file);
+    });
+
+  } else {
+    showAlert('⚠️ Unsupported file type. Use .txt, .docx, or .pdf');
+    setInputDisabled(false);
+  }
+}
+
+function processDocumentText(filename, text) {
+  if (!text || text.trim() === '') {
+    showAlert('⚠️ Document appears empty');
+    setInputDisabled(false);
+    return;
+  }
+
+  // Remove non-printable / binary characters
+  text = text.replace(/[^\x09\x0A\x0D\x20-\x7E\u00A0-\uFFFF]/g, ' ')
+             .replace(/\s{3,}/g, '\n')
+             .trim();
+
+  if (!text || text.length < 5) {
+    showAlert('⚠️ Could not extract readable text from this file');
+    setInputDisabled(false);
+    return;
+  }
+
+  const MAX = 2000;
+  const content = text.substring(0, MAX) + (text.length > MAX ? '\n[... document truncated]' : '');
+  const wordCount = text.split(/\s+/).filter(w => w.length > 0).length;
+
+  // Store in STATE — don't put in chatInput
+  STATE.pendingFile = { name: filename, content: content, wordCount: wordCount };
+
+  // Show badge
+  const badge = document.getElementById('fileBadge');
+  document.getElementById('fileBadgeName').textContent = filename + ' — ' + wordCount + ' words';
+  badge.style.display = 'flex';
+
+  setInputDisabled(false);
+  showAlert('✓ ' + filename + ' loaded (' + wordCount + ' words) — press Send to analyze');
+  document.getElementById('chatInput').focus();
+}
+
+function clearFile() {
+  STATE.pendingFile = null;
+  document.getElementById('fileBadge').style.display = 'none';
+  document.getElementById('fileInput').value = '';
 }
 
 // ─────────────────────────────────────────────
-// UI HELPERS
+// PII DISPLAY HELPERS
 // ─────────────────────────────────────────────
+const PII_DISPLAY_MAP = {
+  'NAME': 'name removed',
+  'ADDRESS': 'address removed',
+  'CITY': 'city removed',
+  'ID_REDACTED': 'ID removed',
+  'PHONE_REDACTED': 'phone removed',
+  'EMAIL_REDACTED': 'email removed',
+  'ZIP_REDACTED': 'postal code removed'
+};
+
+function piiLabel(token) {
+  return PII_DISPLAY_MAP[token] || token.toLowerCase().replace(/_/g, ' ').replace(' redacted', ' removed');
+}
+
+// Panel 2 — inline soft badge (summary)
+function renderSummaryPII(text) {
+  return text.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY|ID_REDACTED|PHONE_REDACTED|EMAIL_REDACTED|ZIP_REDACTED)\]/g,
+    function(_, token) {
+      return '<span class="redacted">' + piiLabel(token) + '</span>';
+    });
+}
+
+// Panel 3 — clean text, no inline markers
+function renderCleanPII(text) {
+  return text.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY|ID_REDACTED|PHONE_REDACTED|EMAIL_REDACTED|ZIP_REDACTED)\]/g, '___');
+}
+
+// Panel 1 (full history) — subtle inline
+function renderHistoryPII(text) {
+  return text.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY|ID_REDACTED|PHONE_REDACTED|EMAIL_REDACTED|ZIP_REDACTED)\]/g,
+    function(_, token) {
+      return '<span class="pii-badge">' + piiLabel(token) + '</span>';
+    });
+}
 function addMessage(type, text) {
   const wrap = document.getElementById('msgWrap');
   const div = document.createElement('div');
   div.className = 'msg ' + type;
 
   // Highlight REDACTED tokens in amber
-  const highlighted = text.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY|ID_REDACTED|PHONE_REDACTED|EMAIL_REDACTED|ZIP_REDACTED)\]/g,
-    '<span class="redacted">[$1]</span>');
+  const highlighted = renderHistoryPII(text);
   div.innerHTML = highlighted;
   wrap.appendChild(div);
   scrollPanel1();
@@ -1014,8 +1184,7 @@ function scrollPanel1() {
 function showSummary(text, wordCount) {
   document.getElementById('summaryEmpty').style.display = 'none';
   const el = document.getElementById('summaryText');
-  el.innerHTML = text.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY)\]/g,
-    '<span class="redacted">[$1]</span>');
+  el.innerHTML = renderSummaryPII(text);
   const limit = STATE.word_limit || 5000;
   document.getElementById('wc2').innerHTML = wordCount + ' / <span id="wcLimit">' + Number(limit).toLocaleString() + '</span> words';
 }
@@ -1023,59 +1192,43 @@ function showSummary(text, wordCount) {
 function showEvidencePack(cleanMessage, piiFound) {
   document.getElementById('evidenceEmpty').style.display = 'none';
   const pack = document.getElementById('evidencePack');
-  pack.style.display = 'block';
+  pack.style.display = 'grid';
 
-  const summaryText = document.getElementById('summaryText').textContent;
-  document.getElementById('evSummary').textContent = summaryText || '(no summary yet — send more messages then run summarizer)';
+  // Left: With Angelina
+  const summaryText = document.getElementById('summaryText').textContent || '';
+  document.getElementById('evSummary').textContent = summaryText || '(no summary yet — run summarizer)';
 
   const msgEl = document.getElementById('evRequest');
   if (piiFound) {
-    msgEl.innerHTML = cleanMessage.replace(/\[([\w_]+_REDACTED|NAME|ADDRESS|CITY)\]/g,
-      '<span class="pii-badge">[$1]</span>');
+    // Show clean text with a banner — no raw tokens
+    const cleanText = renderCleanPII(cleanMessage);
+    msgEl.innerHTML =
+      '<div style="font-family:var(--mono);font-size:10px;color:var(--teal);background:var(--teal-dark);' +
+      'border:1px solid var(--teal-border);border-radius:4px;padding:3px 8px;margin-bottom:6px;letter-spacing:0.04em">' +
+      '🔒 PII sanitized before model access</div>' +
+      '<span style="color:var(--text)">' + cleanText + '</span>';
   } else {
     msgEl.textContent = cleanMessage;
   }
 
-  // Update panel 3 word count
-  const words = cleanMessage.split(/\s+/).filter(w => w.length > 0).length +
-    (summaryText ? summaryText.split(/\s+/).filter(w => w.length > 0).length : 0);
-  document.getElementById('wc3').textContent = words + ' words';
-}
+  // With Angelina word count
+  const summaryWords = summaryText.split(/\s+/).filter(w => w.length > 0).length;
+  const requestWords = cleanMessage.split(/\s+/).filter(w => w.length > 0).length;
+  const withWords = summaryWords + requestWords;
+  document.getElementById('wcWith3').textContent = withWords;
+  document.getElementById('wc3').textContent = withWords + ' words';
 
-function setMode(mode) {
-  STATE.mode = mode;
-  document.getElementById('btnWith').classList.toggle('active', mode === 'with');
-  document.getElementById('btnWithout').classList.toggle('active', mode === 'without');
+  // Right: Without Angelina — full history
+  const fullWords = STATE.full_history_words;
+  const allMsgs = Array.from(document.getElementById('msgWrap').querySelectorAll('.msg'))
+    .map(m => m.textContent).join('\n');
+  const evWithout = document.getElementById('evWithout');
+  evWithout.textContent = allMsgs.substring(0, 400) + (allMsgs.length > 400 ? '\n...' : '');
+  document.getElementById('wcWithout3').textContent = fullWords;
 
-  if (mode === 'without') {
-    // Show full history in panel 3
-    const fullHistory = Array.from(document.querySelectorAll('.msg'))
-      .map(m => m.textContent).join('\n');
-    document.getElementById('evidenceEmpty').style.display = 'none';
-    document.getElementById('evidencePack').style.display = 'block';
-    document.getElementById('evSummary').textContent = '(disabled — full history sent instead)';
-    document.getElementById('evSummary').style.color = 'var(--text-dim)';
-
-    // Show all messages in panel 3 with red tint
-    document.getElementById('evRequest').innerHTML =
-      '<span style="color:#f09595;font-size:11px;font-weight:700">⚠ ALL ' + STATE.full_history_words + ' WORDS SENT TO LLM</span>\n\n' +
-      fullHistory.substring(0, 600) + (fullHistory.length > 600 ? '\n...' : '');
-    document.getElementById('wc3').textContent = STATE.full_history_words + ' words';
-    document.getElementById('wc3').style.color = '#f09595';
-
-    // Panel 3 border red
-    document.querySelector('.panel:nth-child(3)').style.borderLeft = '2px solid var(--red)';
-
-  } else {
-    // Restore With Angelina view
-    document.getElementById('wc3').style.color = '';
-    document.querySelector('.panel:nth-child(3)').style.borderLeft = '2px solid var(--teal-border)';
-    document.getElementById('evSummary').style.color = '';
-    // Re-show last clean message
-    const lastClean = STATE.lastCleanMessage || '';
-    const lastPII = STATE.lastPIIFound || false;
-    if (lastClean) showEvidencePack(lastClean, lastPII);
-  }
+  // Update panel 2 without-angelina counter
+  document.getElementById('wcWithout').textContent = fullWords + ' words';
+  document.getElementById('withoutRow').style.display = 'flex';
 }
 
 function resetAll() {
@@ -1099,19 +1252,12 @@ function resetAll() {
       STATE.turns = 0;
       STATE.pii_blocked = 0;
       STATE.history = [];
-      STATE.mode = 'with';
-      STATE.lastCleanMessage = '';
-      STATE.lastPIIFound = false;
 
       // Reset UI
       updateWordCounts(0, 0, 0);
       updateBudgetUI(0);
       document.getElementById('statTurns').textContent = '0';
       document.getElementById('statPII').textContent = '0';
-      document.getElementById('modeToggle').style.display = 'none';
-      document.getElementById('modeEmpty').style.display = 'block';
-      document.getElementById('btnWith').classList.add('active');
-      document.getElementById('btnWithout').classList.remove('active');
       document.querySelector('.panel:nth-child(3)').style.borderLeft = '2px solid var(--teal-border)';
       document.getElementById('wc3').style.color = '';
 
