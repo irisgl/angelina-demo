@@ -634,6 +634,10 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); min-
             <div class="evidence-label">Context (summary)</div>
             <div class="evidence-content" id="evSummary">—</div>
           </div>
+          <div class="evidence-section" id="evEvidenceSection" style="display:none">
+            <div class="evidence-label" style="color:var(--amber)">📦 Org Memory injected</div>
+            <div id="evEvidenceItems" style="font-family:var(--mono);font-size:11px;color:var(--amber);background:#fff8e6;border:1px solid var(--amber);border-radius:4px;padding:6px 10px;margin-top:4px;line-height:1.8"></div>
+          </div>
           <div class="evidence-section">
             <div class="evidence-label">Request (PII cleaned)</div>
             <div class="evidence-content" id="evRequest">—</div>
@@ -909,7 +913,7 @@ function sendMessage() {
     updateWordCounts(STATE.full_history_words, STATE.summary_words, sentWords);
 
     // Update panel 3 — evidence pack
-    showEvidencePack(cleanMsg, data.pii_found);
+    showEvidencePack(cleanMsg, data.pii_found, data.evidence_items || []);
 
     // Budget
     updateBudgetUI(data.budget_pct || 0);
@@ -1190,7 +1194,7 @@ function showSummary(text, wordCount) {
   document.getElementById('wc2').innerHTML = wordCount + ' / <span id="wcLimit">' + Number(limit).toLocaleString() + '</span> words';
 }
 
-function showEvidencePack(cleanMessage, piiFound) {
+function showEvidencePack(cleanMessage, piiFound, evidenceItems) {
   document.getElementById('evidenceEmpty').style.display = 'none';
   const pack = document.getElementById('evidencePack');
   pack.style.display = 'grid';
@@ -1199,9 +1203,21 @@ function showEvidencePack(cleanMessage, piiFound) {
   const summaryText = document.getElementById('summaryText').textContent || '';
   document.getElementById('evSummary').textContent = summaryText || '(no summary yet — run summarizer)';
 
+  // Evidence from org_memory
+  const evSection = document.getElementById('evEvidenceSection');
+  const evItems = document.getElementById('evEvidenceItems');
+  if (evidenceItems && evidenceItems.length > 0) {
+    evSection.style.display = 'block';
+    evItems.innerHTML = evidenceItems.map(function(e) {
+      return '· <strong>' + e.entity + '</strong>: ' + e.fact +
+        ' <span style="color:#888;font-size:10px">(מקור: ' + e.source + ')</span>';
+    }).join('<br>');
+  } else {
+    evSection.style.display = 'none';
+  }
+
   const msgEl = document.getElementById('evRequest');
   if (piiFound) {
-    // Show clean text with a banner — no raw tokens
     const cleanText = renderCleanPII(cleanMessage);
     msgEl.innerHTML =
       '<div style="font-family:var(--mono);font-size:10px;color:var(--teal);background:var(--teal-dark);' +
