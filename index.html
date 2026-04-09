@@ -736,6 +736,7 @@ let STATE = {
   summary_words: 0,
   history: [],  // last N turns for conversational context
   pendingFile: null,
+  lastRawMessage: '',
   session_id: 'demo-' + Date.now()
 };
 
@@ -838,6 +839,9 @@ function sendMessage() {
     showAlert('Budget exceeded for ' + STATE.user + '. Request blocked.');
     return;
   }
+
+  // Save raw message (with PII) for WITHOUT ANGELINA display
+  STATE.lastRawMessage = message;
 
   input.value = '';
   clearFile();
@@ -1237,13 +1241,16 @@ function showEvidencePack(cleanMessage, piiFound, evidenceItems) {
 
   // Right: Without Angelina — full history
   const fullWords = STATE.full_history_words;
-  const allMsgs = Array.from(document.getElementById('msgWrap').querySelectorAll('.msg'))
-    .map(m => m.textContent).join('\n');
+
+  // WITHOUT ANGELINA — show raw message (with PII) to demonstrate what would have been sent
   const evWithout = document.getElementById('evWithout');
-  evWithout.textContent = allMsgs.substring(0, 400) + (allMsgs.length > 400 ? '\n...' : '');
+  const rawMsg = STATE.lastRawMessage || '';
+  const rawPreview = rawMsg.substring(0, 400) + (rawMsg.length > 400 ? '\n...' : '');
+  evWithout.innerHTML = rawPreview
+    ? '<span style="font-size:10px;color:#c0392b;font-family:var(--mono);letter-spacing:0.04em">⚠ including PII — not sanitized</span><br>' + rawPreview
+    : 'No messages yet';
   document.getElementById('wcWithout3').textContent = fullWords;
 
-  // Update panel 2 without-angelina counter
   document.getElementById('wcWithout').textContent = fullWords + ' words';
   document.getElementById('withoutRow').style.display = 'flex';
 }
