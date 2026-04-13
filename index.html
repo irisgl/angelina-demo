@@ -763,10 +763,14 @@ function callScript(payload, callback) {
 // ─────────────────────────────────────────────
 // USER SWITCH
 // ─────────────────────────────────────────────
+function sanitizeId(str) {
+  return str.replace(/[^a-zA-Z0-9\u05D0-\u05EA]/g, '_');
+}
+
 function switchUser(user) {
   // Update tab UI
   document.querySelectorAll('.user-tab').forEach(t => t.classList.remove('active'));
-  const activeTab = document.getElementById('tab-' + user);
+  const activeTab = document.getElementById('tab-' + sanitizeId(user));
   if (activeTab) activeTab.classList.add('active');
 
   // Reset chat UI
@@ -901,7 +905,10 @@ function sendMessage() {
 
     if (data.pii_found) {
       STATE.pii_blocked++;
+      STATE.lastPiiFound = true;
       document.getElementById('statPII').textContent = STATE.pii_blocked;
+    } else {
+      STATE.lastPiiFound = false;
     }
 
     // Update word counts
@@ -1245,8 +1252,11 @@ function showEvidencePack(cleanMessage, piiFound, evidenceItems) {
   const evWithout = document.getElementById('evWithout');
   const rawMsg = STATE.lastRawMessage || '';
   const rawPreview = rawMsg.substring(0, 400) + (rawMsg.length > 400 ? '\n...' : '');
+  const piiWasFound = STATE.lastPiiFound || false;
   evWithout.innerHTML = rawPreview
-    ? '<span style="font-size:10px;color:#c0392b;font-family:var(--mono);letter-spacing:0.04em">⚠ including PII — not sanitized</span><br>' + rawPreview
+    ? (piiWasFound
+        ? '<span style="font-size:10px;color:#c0392b;font-family:var(--mono);letter-spacing:0.04em">⚠ including PII — not sanitized</span><br>' + rawPreview
+        : '<span style="font-size:10px;color:#1d9e75;font-family:var(--mono);letter-spacing:0.04em">✓ no PII detected</span><br>' + rawPreview)
     : 'No messages yet';
   document.getElementById('wcWithout3').textContent = fullWords;
 
@@ -1365,7 +1375,7 @@ function loadUsersFromSheet() {
     users.forEach(function(u, idx) {
       const btn = document.createElement('button');
       btn.className = 'user-tab' + (idx === 0 ? ' active' : '');
-      btn.id = 'tab-' + u.user;
+      btn.id = 'tab-' + sanitizeId(u.user);
       btn.textContent = u.user + ' \u2014 ' + u.role;
       btn.onclick = function() { switchUser(u.user); };
       container.appendChild(btn);
